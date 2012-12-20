@@ -2,13 +2,28 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                           controllers.Application.index
+# Core Ressource
+GET		/info/server								controllers.ServerInfo.get
 
-# Task pages
-GET     /tasks                  	controllers.Application.tasks
-POST    /tasks                  	controllers.Application.newTask
-POST    /tasks/:id/delete       	controllers.Application.deleteTask(id: Long)
+# Admin Ressource
+PUT		/admin										controllers.Admin.auth
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+# User Ressource
+GET		/user										controllers.User.getAll
+GET		/user/:id									controllers.User.get(id: Long)
+PUT		/user/:id									controllers.User.create(id: Long)
+POST	/user										controllers.User.update
+DELETE	/user/:id									controllers.User.delete(id: Long)
+PUT		/user/auth									controllers.User.auth
+GET		/user/:id/degreecourse						controllers.User.getDegreeCourse(id: Long)
+GET		/user/:id/lecture							controllers.User.getLectures(id: Long)
+
+# Univeristy Ressource
+GET		/university									controllers.University.getAll
+GET		/university/:id								controllers.University.get(id: Long)
+PUT		/university									controllers.University.create
+POST	/university									controllers.University.update
+DELETE	/university/:id								controllers.University.delete(id: Long)
+GET		/university/:id/department					controllers.University.getAllDepartment(id: Long)
+GET		/univeristy/:uniId/department/:depId		controllers.University.getDepartment(uniId: Long, depId: Long)
+PUT		/university/:id/department					controllers.University.createDepartment(id: Long)
