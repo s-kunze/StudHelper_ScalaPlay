@@ -2,15 +2,17 @@ package controllers
 
 import play.api.mvc.Controller
 
+import transfer._
+
 object Modul extends Controller {
 
   def getAll = TODO
   
-  def get(id: Long) = TODO
+  def get(id: Long, modul: ModulTransfer) = TODO
   
-  def create(id: Long) = TODO
+  def create(id: Long, modul: ModulTransfer) = TODO
   
-  def update = TODO
+  def update(modul: ModulTransfer) = TODO
   
   def delete(id: Long) = TODO
   
@@ -18,7 +20,7 @@ object Modul extends Controller {
   
   def getLecture(modId: Long, lecId: Long) = TODO
   
-  def createLecture(id: Long) = TODO
+  def createLecture(id: Long, lecture: LectureTransfer) = TODO
   
   def getDepartment(id: Long) = TODO
   

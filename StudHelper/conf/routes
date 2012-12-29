@@ -6,75 +6,75 @@
 GET     /info/server                             controllers.ServerInfo.get
 
 # Admin Ressource
-PUT     /admin                                   controllers.Admin.auth
+PUT     /admin                                   controllers.Admin.auth(authTransfer: AuthTransfer)
 
 # User Ressource
 GET     /user                                    controllers.User.getAll
-GET     /user/:id                                controllers.User.get(id: Long)
-PUT     /user/:id                                controllers.User.create(id: Long)
-POST    /user                                    controllers.User.update
+GET     /user/:id                                controllers.User.get(id: Long, userTransfer: UserTransfer)
+PUT     /user/:id                                controllers.User.create(id: Long, newUserTransfer: NewUserTransfer)
+POST    /user                                    controllers.User.update(userTransfer: UserTransfer)
 DELETE  /user/:id                                controllers.User.delete(id: Long)
-PUT     /user/auth                               controllers.User.auth
+PUT     /user/auth                               controllers.User.auth(authTransfer: AuthTransfer)
 GET     /user/:id/degreecourse                   controllers.User.getDegreeCourse(id: Long)
 GET     /user/:id/lecture                        controllers.User.getLectures(id: Long)
 
 # Univeristy Ressource
 GET     /university                              controllers.University.getAll
-GET     /university/:id                          controllers.University.get(id: Long)
-PUT     /university                              controllers.University.create
-POST    /university                              controllers.University.update
+GET     /university/:id                          controllers.University.get(id: Long, university: UniversityTransfer)
+PUT     /university                              controllers.University.create(university: UniversityTransfer)
+POST    /university                              controllers.University.update(university: UniversityTransfer)
 DELETE  /university/:id                          controllers.University.delete(id: Long)
 GET     /university/:id/department               controllers.University.getAllDepartment(id: Long)
 GET     /univeristy/:uniId/department/:depId     controllers.University.getDepartment(uniId: Long, depId: Long)
-PUT     /university/:id/department               controllers.University.createDepartment(id: Long)
+PUT     /university/:id/department               controllers.University.createDepartment(id: Long, department: DepartmentTransfer)
 
 # Department Ressource
 GET     /department                              controllers.Department.getAll
-GET     /department/:id                          controllers.Department.get(id: Long)
-PUT     /department/:id                          controllers.Department.create(id: Long)
-POST    /department                              controllers.Department.update
+GET     /department/:id                          controllers.Department.get(id: Long, department: DepartmentTransfer)
+PUT     /department/:id                          controllers.Department.create(id: Long, department: DepartmentTransfer)
+POST    /department                              controllers.Department.update(department: DepartmentTransfer)
 DELETE  /department/:id                          controllers.Department.delete(id: Long)
 GET     /department/:id/degreecourse             controllers.Department.getAllDegreeCourse(id: Long)
 GET     /department/:depId/degreecourse/degId    controllers.Department.getDegreeCourse(depId: Long, degId: Long)
-PUT     /department/:id/degreecourse             controllers.Department.createDegreeCourse(id: Long)
-GET     /department/:id/modul                    controllers.Department.getModul
+PUT     /department/:id/degreecourse             controllers.Department.createDegreeCourse(id: Long, degreeCourse: DegreeCourseTransfer)
+GET     /department/:id/modul                    controllers.Department.getModul(id: Long)
 
 # DegreeCourse Ressource
 GET     /degreecourse                            controllers.DegreeCourse.getAll               
-GET     /degreecourse/:id                        controllers.DegreeCourse.get(id: Long)
-PUT     /degreecourse/:id                        controllers.DegreeCourse.create(id: Long)
-POST    /degreecourse                            controllers.DegreeCourse.update
+GET     /degreecourse/:id                        controllers.DegreeCourse.get(id: Long, degreeCourse: DegreeCourseTransfer)
+PUT     /degreecourse/:id                        controllers.DegreeCourse.create(id: Long, degreeCourse: DegreeCourseTransfer)
+POST    /degreecourse                            controllers.DegreeCourse.update(degreeCourse: DegreeCourseTransfer)
 DELETE  /degreecourse/:id                        controllers.DegreeCourse.delete(id: Long)
 GET     /degreecourse/:id/part                   controllers.DegreeCourse.getAllPart(id: Long)
 GET     /degreecourse/:degId/part/:parId         controllers.DegreeCourse.getPart(degId: Long, parId: Long)
-PUT     /degreecourse/:id/part                   controllers.DegreeCourse.createPart(id: Long)
+PUT     /degreecourse/:id/part                   controllers.DegreeCourse.createPart(id: Long, part: PartTransfer)
 
 # Part Ressource
 GET     /part                                    controllers.Part.getAll
-GET     /part/:id                                controllers.Part.get(id: Long)
-PUT     /part/:id                                controllers.Part.create(id: Long)
-POST    /part                                    controllers.Part.update
+GET     /part/:id                                controllers.Part.get(id: Long, part: PartTransfer)
+PUT     /part/:id                                controllers.Part.create(id: Long, part: PartTransfer)
+POST    /part                                    controllers.Part.update(part: PartTransfer)
 DELETE  /part/:id                                controllers.Part.delete(id: Long)
 GET     /part/:id/modul                          controllers.Part.getAllModul(id: Long)
 GET     /part/:parId/modul/:modId                controllers.Part.getModul(parId: Long, modId: Long)
-PUT     /part/:id/modul                          controllers.Part.createModul(id: Long)
+PUT     /part/:id/modul                          controllers.Part.createModul(id: Long, modul: ModulTransfer)
 
 # Modul Ressource
 GET     /modul                                   controllers.Modul.getAll
-GET     /modul/:id                               controllers.Modul.get(id: Long)
-PUT     /modul/:id                               controllers.Modul.create(id: Long)
-POST    /modul                                   controllers.Modul.update
+GET     /modul/:id                               controllers.Modul.get(id: Long, modul: ModulTransfer)
+PUT     /modul/:id                               controllers.Modul.create(id: Long, modul: ModulTransfer)
+POST    /modul                                   controllers.Modul.update(modul: ModulTransfer)
 DELETE  /modul/:id                               controllers.Modul.delete(id: Long)
 GET     /modul/:id/lecture                       controllers.Modul.getAllLecture(id: Long)
 GET     /modul/:modId/lecture/:lecId             controllers.Modul.getLecture(modId: Long, lecId: Long)
-PUT     /modul/:id/lecture                       controllers.Modul.createLecture(id: Long)
+PUT     /modul/:id/lecture                       controllers.Modul.createLecture(id: Long, lecture: LectureTransfer)
 GET     /modul/:id/department                    controllers.Modul.getDepartment(id: Long)
 
 # Lecture Ressource
 GET     /lecture                                 controllers.Lecture.getAll
-GET     /lecture/:id                             controllers.Lecture.get(id: Long)
-PUT     /lecture/:id                             controllers.Lecture.create(id: Long)
-POST    /lecture                                 controllers.Lecture.update
+GET     /lecture/:id                             controllers.Lecture.get(id: Long, lecture: LectureTransfer)
+PUT     /lecture/:id                             controllers.Lecture.create(id: Long, lecture: LectureTransfer)
+POST    /lecture                                 controllers.Lecture.update(lecture: LectureTransfer)
 DELETE  /lecture/:id                             controllers.Lecture.delete(id: Long)
 PUT     /lecture/:lecId/adduser/:userId          controllers.Lecture.addLecture(lecId: Long, userId: Long, mark: String ?= "0.0")
 

@@ -2,15 +2,17 @@ package controllers
 
 import play.api.mvc.Controller
 
+import transfer._
+
 object DegreeCourse extends Controller {
 
   def getAll = TODO           
   
-  def get(id: Long) = TODO
+  def get(id: Long, degreeCourse: DegreeCourseTransfer) = TODO
   
-  def create(id: Long) = TODO
+  def create(id: Long, degreeCourse: DegreeCourseTransfer) = TODO
   
-  def update = TODO
+  def update(degreeCourse: DegreeCourseTransfer) = TODO
   
   def delete(id: Long) = TODO
   
@@ -18,6 +20,6 @@ object DegreeCourse extends Controller {
   
   def getPart(degId: Long, parId: Long) = TODO
   
-  def createPart(id: Long) = TODO
+  def createPart(id: Long, part: PartTransfer) = TODO
   
 }

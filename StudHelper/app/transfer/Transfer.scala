@@ -3,7 +3,7 @@ package transfer
 abstract class Transfer
 
 /* Server Info */
-case class ServerInfo(name: String, version: String) extends Transfer
+case class ServerInfoTransfer(name: String, version: String) extends Transfer
 
 /* UserTransfer Objects */
 case class AuthTransfer(id: Long, `type`: String) extends Transfer // type = USER | ADMIN
