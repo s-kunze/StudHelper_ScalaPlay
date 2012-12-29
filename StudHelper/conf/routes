@@ -3,6 +3,7 @@
 # ~~~~
 
 # Core Ressource
+<<<<<<< HEAD
 GET     /info/server                             controllers.ServerInfo.get
 
 # Admin Ressource
@@ -77,5 +78,3 @@ PUT     /lecture/:id                             controllers.Lecture.create(id: 
 POST    /lecture                                 controllers.Lecture.update
 DELETE  /lecture/:id                             controllers.Lecture.delete(id: Long)
 PUT     /lecture/:lecId/adduser/:userId          controllers.Lecture.addLecture(lecId: Long, userId: Long, mark: String ?= "0.0")
-
-
