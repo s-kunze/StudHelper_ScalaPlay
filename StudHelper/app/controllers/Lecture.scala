@@ -8,11 +8,11 @@ object Lecture extends Controller {
 
   def getAll = TODO
   
-  def get(id: Long, lecture: LectureTransfer) = TODO
+  def get(id: Long) = TODO
   
-  def create(id: Long, lecture: LectureTransfer) = TODO
+  def create(id: Long) = TODO
   
-  def update(lecture: LectureTransfer) = TODO
+  def update = TODO
   
   def delete(id: Long) = TODO
   

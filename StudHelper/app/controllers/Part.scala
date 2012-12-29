@@ -8,11 +8,11 @@ object Part extends Controller {
 
   def getAll = TODO
   
-  def get(id: Long, part: PartTransfer) = TODO
+  def get(id: Long) = TODO
   
-  def create(id: Long, part: PartTransfer) = TODO
+  def create(id: Long) = TODO
   
-  def update(part: PartTransfer) = TODO
+  def update = TODO
   
   def delete(id: Long) = TODO
   
@@ -20,6 +20,6 @@ object Part extends Controller {
   
   def getModul(parId: Long, modId: Long) = TODO
   
-  def createModul(id: Long, modul: ModulTransfer) = TODO
+  def createModul(id: Long) = TODO
   
 }

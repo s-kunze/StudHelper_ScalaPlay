@@ -8,15 +8,15 @@ object User extends Controller {
 
   def getAll = TODO
   
-  def get(id: Long, userTransfer: UserTransfer) = TODO
+  def get(id: Long) = TODO
   
-  def create(id: Long, newUserTransfer: NewUserTransfer) = TODO
+  def create(id: Long) = TODO
  
-  def update(userTransfer: UserTransfer) = TODO
+  def update = TODO
   
   def delete(id: Long) = TODO
   
-  def auth(authTransfer: AuthTransfer) = TODO
+  def auth = TODO
   
   def getDegreeCourse(id: Long) = TODO
   

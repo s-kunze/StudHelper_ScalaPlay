@@ -8,11 +8,11 @@ object Department extends Controller {
 
   def getAll = TODO
   
-  def get(id: Long, department: DepartmentTransfer) = TODO
+  def get(id: Long) = TODO
   
-  def create(id: Long, department: DepartmentTransfer) = TODO
+  def create(id: Long) = TODO
   
-  def update(department: DepartmentTransfer) = TODO
+  def update = TODO
   
   def delete(id: Long) = TODO
   
@@ -20,7 +20,7 @@ object Department extends Controller {
   
   def getDegreeCourse(depId: Long, degId: Long) = TODO
   
-  def createDegreeCourse(id: Long, degreeCourse: DegreeCourseTransfer) = TODO
+  def createDegreeCourse(id: Long) = TODO
   
   def getModul(id: Long) = TODO
   
