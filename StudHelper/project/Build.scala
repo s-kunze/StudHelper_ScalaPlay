@@ -8,6 +8,7 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0-SNAPSHOT"
 
     val appDependencies = Seq(
+      "com.codahale" % "jerkson_2.9.1" % "0.5.0"
       // Add your project dependencies here,
     )
 

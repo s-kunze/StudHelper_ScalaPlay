@@ -1,9 +1,19 @@
 package transfer
 
+import models.Admin
+
 abstract class Transfer
 
 /* Server Info */
 case class ServerInfoTransfer(name: String, version: String) extends Transfer
+
+case class NewAdminTransfer(username: String, password: String) extends Transfer
+
+case class AdminTransfer(id: Long, username: String, password: String) extends Transfer
+
+object AdminTransfer {
+  
+}
 
 /* UserTransfer Objects */
 case class AuthTransfer(id: Long, `type`: String) extends Transfer // type = USER | ADMIN

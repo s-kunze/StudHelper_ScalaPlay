@@ -14,7 +14,7 @@ object User extends Controller {
 	val user = UserTransfer(id,"Stefan", "Kunze", "test",3)
     val jsonString = Json.generate(user)
     Ok(jsonString).as("application/json")
-}
+  }
   
   def create(id: Long) = TODO
  
