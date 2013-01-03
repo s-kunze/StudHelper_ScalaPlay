@@ -8,8 +8,9 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0-SNAPSHOT"
 
     val appDependencies = Seq(
-      "com.codahale" % "jerkson_2.9.1" % "0.5.0"
-      // Add your project dependencies here,
+      "com.codahale" % "jerkson_2.9.1" % "0.5.0",
+      "org.squeryl" %% "squeryl" % "0.9.5-2",
+      "mysql" % "mysql-connector-java" % "5.1.10"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
