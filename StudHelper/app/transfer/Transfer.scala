@@ -23,9 +23,9 @@ case class UserTransfer(id: Long, firstname: String,
                         creditpoints: Int) extends Transfer
                         
 /* BackendTransfer Objects */
-case class UniversityTransfer(id: Long, name: String) extends Transfer
+case class UniversityTransfer(id: Option[Long], name: String) extends Transfer
 
-case class DepartmentTransfer(id: Long, name: String) extends Transfer
+case class DepartmentTransfer(id: Option[Long], name: String) extends Transfer
 
 case class DegreeCourseTransfer(id: Long, name: String, creditPoints: Int) extends Transfer
 

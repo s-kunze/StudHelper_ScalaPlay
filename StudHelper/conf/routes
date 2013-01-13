@@ -30,7 +30,7 @@ PUT     /university                              controllers.University.create
 POST    /university                              controllers.University.update
 DELETE  /university/:id                          controllers.University.delete(id: Long)
 GET     /university/:id/department               controllers.University.getAllDepartment(id: Long)
-GET     /univeristy/:uniId/department/:depId     controllers.University.getDepartment(uniId: Long, depId: Long)
+GET     /university/:uniId/department/:depId     controllers.University.getDepartment(uniId: Long, depId: Long)
 PUT     /university/:id/department               controllers.University.createDepartment(id: Long)
 
 # Department Ressource
