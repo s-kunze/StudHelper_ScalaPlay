@@ -1,7 +1,9 @@
 package models
 
 import org.squeryl.KeyedEntity
+import org.squeryl.Query
 import org.squeryl.dsl._
+
 import transfer.UniversityTransfer
 
 case class University(val name: String) extends KeyedEntity[Long] {
@@ -18,6 +20,10 @@ object University {
   
   implicit def university2universityTransfer(university: University) : UniversityTransfer = {
     UniversityTransfer(Some(university.id), university.name)
+  }
+  
+  implicit def universityList2universityTransferList(universities: Query[University]) : Iterable[UniversityTransfer] = {
+    universities map (x => UniversityTransfer(Some(x.id), x.name))
   }
   
 }

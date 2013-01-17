@@ -11,12 +11,19 @@ import play.api.Logger
 
 object University extends Controller {
 
-  def getAll = TODO
+  def getAll = Action {
+    val json = transaction {
+	  val universites: Iterable[UniversityTransfer] = from(StudhelperDb.university)(u => select(u))
+      Json.generate(universites)
+	}  
+	
+    Ok(json) as("application/json")
+  }
   
   def get(id: Long) = Action {
     transaction {
       try { 
-        val university: UniversityTransfer = StudhelperDb.university.where(a => a.id === id).single
+        val university: UniversityTransfer = StudhelperDb.university.where(u => u.id === id).single
         val jsonString = Json.generate(university)
 
         Ok(jsonString) as("application/json")
@@ -46,11 +53,58 @@ object University extends Controller {
   	}
   }
   
-  def update = TODO
+  def update = Action { implicit request => {
+      val jsonString = request.body.asText
+    
+      jsonString match {
+        case Some(x) => {
+          val university = Json.parse[UniversityTransfer](x)
+          
+          val rows = transaction {
+            StudhelperDb.university.update(u =>
+              where(u.id === university.id)
+              set(u.name := university.name)
+            )
+          }
+          
+          if(rows > 0)
+            Ok
+          else 
+            NotFound
+        }
+        case _ => InternalServerError
+      }
+    
+    }
+  }
   
-  def delete(id: Long) = TODO
+  def delete(id: Long) = Action { 
+    transaction {
+      val row = StudhelperDb.university.deleteWhere(u => u.id === id)
+      
+      if(row > 0) 
+        Ok
+      else
+        NotFound
+    }
+  }
   
-  def getAllDepartment(id: Long) = TODO
+  def getAllDepartment(id: Long) = Action {
+    transaction {
+      try { 
+        val university = StudhelperDb.university.where(u => u.id === id).single
+        
+        val departments: Iterable[DepartmentTransfer] = university.departments
+        
+        val jsonString = Json.generate(departments)
+
+        Ok(jsonString) as("application/json")
+      } catch {
+        case e:RuntimeException => NotFound
+        case _ => InternalServerError
+      }
+    }
+  }
   
   def getDepartment(uniId: Long, depId: Long) = Action {
     transaction {
