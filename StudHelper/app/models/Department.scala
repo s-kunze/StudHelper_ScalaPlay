@@ -10,6 +10,7 @@ case class Department(val name: String, val universityId: Option[Long]) extends 
 	val id:Long = 0
 	
 	lazy val university: ManyToOne[University] = StudhelperDb.universityToDepartment.right(this)
+	lazy val degreeCourses: OneToMany[DegreeCourse] = StudhelperDb.departmentToDegreeCourse.left(this);
 }
 
 object Department {
