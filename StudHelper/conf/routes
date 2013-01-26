@@ -6,12 +6,7 @@
 #GET     /info/server                             controllers.ServerInfo.get
 
 # Admin Ressource
-GET     /admin                                   controllers.Admin.getAll
-GET     /admin/:id                               controllers.Admin.get(id: Long)
-PUT     /admin                                   controllers.Admin.create
-POST    /admin                                   controllers.Admin.update
-DELETE  /admin/:id                               controllers.Admin.delete(id: Long)
-#PUT     /admin                                   controllers.Admin.auth
+PUT     /admin                                   controllers.Admin.auth
 
 # User Ressource
 GET     /user                                    controllers.User.getAll

@@ -6,9 +6,8 @@ import play.api.mvc.Controller
 import play.api.mvc.Action
 import transfer._
 import models.StudhelperDb
-import models.{DegreeCourse => DegreeCourseModel}
+import models.{DegreeCourse => DegreeCourseModel, Department => DepartmentModel}
 import play.api.Logger
-import transfer.DegreeCourseTransfer
 
 object Department extends Controller {
 
@@ -40,9 +39,13 @@ object Department extends Controller {
       
       jsonString match {
         case Some(x) => {
-          val department = Json.parse[DepartmentTransfer](x)
+          val department: DepartmentModel = Json.parse[DepartmentTransfer](x)
+
           transaction {
-            val newDepartment = StudhelperDb.department insert department
+            val university = StudhelperDb.university.where(u => u.id === id).single
+       		val newDepartment = university.departments.assign(department)
+            StudhelperDb.department insert newDepartment
+            
 	        newDepartment.id match {
 	          case 0 => InternalServerError
 		      case _ => Created
@@ -130,14 +133,13 @@ object Department extends Controller {
       
       jsonString match {
         case Some(x) => {
-          val degreeCourseTransfer = Json.parse[DegreeCourseTransfer](x)
-          
+          val degreeCourse: DegreeCourseModel = Json.parse[DegreeCourseTransfer](x)
+
           transaction {
             val department = StudhelperDb.department.where(d => d.id === id).single
-           
-            val degreeCourse = DegreeCourseModel(degreeCourseTransfer.name,degreeCourseTransfer.creditPoints, Some(department.id))
+       		val newDegreeCourse = department.degreeCourses.assign(degreeCourse)
+            StudhelperDb.degreeCourse insert newDegreeCourse
             
-            val newDegreeCourse = StudhelperDb.degreeCourse insert degreeCourse
 	        newDegreeCourse.id match {
 	          case 0 => InternalServerError
 		      case _ => Created

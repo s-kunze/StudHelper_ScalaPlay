@@ -1,25 +1,157 @@
 package controllers
 
+import org.squeryl.PrimitiveTypeMode._
+import com.codahale.jerkson.Json
 import play.api.mvc.Controller
-
+import play.api.mvc.Action
 import transfer._
+import models.StudhelperDb
+import models.{Part => PartModel, DegreeCourse => DegreeCourseModel}
+import play.api.Logger
 
 object DegreeCourse extends Controller {
 
-  def getAll = TODO           
+  def getAll = Action {
+    val json = transaction {
+	  val degreeCourses: Iterable[DegreeCourseTransfer] = from(StudhelperDb.degreeCourse)(d => select(d))
+      Json.generate(degreeCourses)
+	}  
+	
+    Ok(json) as("application/json")
+  }           
   
-  def get(id: Long) = TODO
+  def get(id: Long) = Action {
+    transaction {
+      try { 
+        val degreeCourse: DegreeCourseTransfer = StudhelperDb.degreeCourse.where(d => d.id === id).single
+        val jsonString = Json.generate(degreeCourse)
+
+        Ok(jsonString) as("application/json")
+      } catch {
+        case e:RuntimeException => NotFound
+        case _ => InternalServerError
+      }
+    }
+  }
   
-  def create(id: Long) = TODO
+  def create(id: Long) = Action { implicit request => {
+      val jsonString = request.body.asText
+      
+      jsonString match {
+        case Some(x) => {
+          val degreeCourse: DegreeCourseModel = Json.parse[DegreeCourseTransfer](x)
+
+          transaction {
+            val department = StudhelperDb.department.where(d => d.id === id).single
+       		val newDegreeCourse = department.degreeCourses.assign(degreeCourse)
+            StudhelperDb.degreeCourse insert newDegreeCourse
+            
+	        newDegreeCourse.id match {
+	          case 0 => InternalServerError
+		      case _ => Created
+		    }
+          }
+        }
+        case _ => InternalServerError
+      }
+  	}
+  }
   
-  def update = TODO
+  def update = Action { implicit request => {
+      val jsonString = request.body.asText
+    
+      jsonString match {
+        case Some(x) => {
+          val degreeCourse = Json.parse[DegreeCourseTransfer](x)
+          
+          val rows = transaction {
+            StudhelperDb.degreeCourse.update(d =>
+              where(d.id === degreeCourse.id)
+              set(
+                  d.name := degreeCourse.name,
+                  d.creditPoints := degreeCourse.creditPoints
+              )
+            )
+          }
+          
+          if(rows > 0)
+            Ok
+          else 
+            NotFound
+        }
+        case _ => InternalServerError
+      }
+    
+    }
+  }
   
-  def delete(id: Long) = TODO
+  def delete(id: Long) = Action { 
+    transaction {
+      val row = StudhelperDb.degreeCourse.deleteWhere(d => d.id === id)
+      
+      if(row > 0) 
+        Ok
+      else
+        NotFound
+    }
+  }
   
-  def getAllPart(id: Long) = TODO
+  def getAllPart(id: Long) = Action {
+    transaction {
+      try { 
+        val degreeCourse = StudhelperDb.degreeCourse.where(d => d.id === id).single
+        
+        val parts: Iterable[PartTransfer] = degreeCourse.parts
+        
+        val jsonString = Json.generate(parts)
+
+        Ok(jsonString) as("application/json")
+      } catch {
+        case e:RuntimeException => NotFound
+        case _ => InternalServerError
+      }
+    }
+  }
   
-  def getPart(degId: Long, parId: Long) = TODO
+  def getPart(degId: Long, parId: Long) = Action {
+    transaction {
+	  try { 
+        val part: PartTransfer = StudhelperDb.part.where(p => p.id === parId).single
+	    
+        val jsonString = Json.generate(part)
+        
+        Ok(jsonString) as("application/json")
+      } catch {
+        case e:RuntimeException => NotFound
+        case e:Exception => { 
+          Logger.error("", e)
+          InternalServerError
+        }
+      }
+    }
+  }
   
-  def createPart(id: Long) = TODO
+  def createPart(id: Long) = Action { implicit request => {
+      val jsonString = request.body.asText
+      
+      jsonString match {
+        case Some(x) => {
+          val part: PartModel = Json.parse[PartTransfer](x)
+
+          transaction {
+            val degreeCourse = StudhelperDb.degreeCourse.where(d => d.id === id).single
+       		val newPart = degreeCourse.parts.assign(part)
+            StudhelperDb.part insert newPart
+            
+	        newPart.id match {
+	          case 0 => InternalServerError
+		      case _ => Created
+		    }
+          }
+        }
+        case _ => InternalServerError
+      }
+  	}
+  }
   
 }

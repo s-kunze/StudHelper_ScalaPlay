@@ -25,8 +25,8 @@ object Global extends GlobalSettings {
       if(StudhelperDb.tables.isEmpty) {
         StudhelperDb.create
       } else {
-        StudhelperDb.drop
-        StudhelperDb.create
+//        StudhelperDb.drop
+//        StudhelperDb.create
       }
     }
   }

@@ -11,6 +11,7 @@ case class DegreeCourse(val name: String, val creditPoints: Int, departmentId: O
 	
 	lazy val department: ManyToOne[Department] = StudhelperDb.departmentToDegreeCourse.right(this)
 	lazy val parts: OneToMany[Part] = StudhelperDb.degreeCourseToPart.left(this);
+	lazy val users: OneToMany[User] = StudhelperDb.degreeCourseToUser.left(this);
 }
 
 object DegreeCourse {

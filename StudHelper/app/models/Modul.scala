@@ -10,6 +10,7 @@ case class Modul(val name: String, val creditPoints: Int, partId: Option[Long]) 
 	val id: Long = 0
 	
 	lazy val part: ManyToOne[Part] = StudhelperDb.partToModul.right(this)
+	lazy val lectures = StudhelperDb.modulToLecture.left(this)
 }
 
 object Modul {

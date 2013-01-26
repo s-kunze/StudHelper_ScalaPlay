@@ -6,8 +6,8 @@ import play.api.mvc.Controller
 import play.api.mvc.Action
 import transfer._
 import models.StudhelperDb
-import models.{Department => DepartmentModel}
 import play.api.Logger
+import models.{Department => DepartmentModel}
 
 object University extends Controller {
 
@@ -129,14 +129,13 @@ object University extends Controller {
       
       jsonString match {
         case Some(x) => {
-          val departmentTransfer = Json.parse[DepartmentTransfer](x)
-          
+          val department: DepartmentModel = Json.parse[DepartmentTransfer](x)
+
           transaction {
             val university = StudhelperDb.university.where(u => u.id === id).single
-           
-            val department = DepartmentModel(departmentTransfer.name, Some(university.id))
+       		val newDepartment = university.departments.assign(department)
+            StudhelperDb.department insert newDepartment
             
-            val newDepartment = StudhelperDb.department insert department
 	        newDepartment.id match {
 	          case 0 => InternalServerError
 		      case _ => Created
