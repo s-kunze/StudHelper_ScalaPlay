@@ -6,8 +6,10 @@ import play.api.mvc.Controller
 import play.api.mvc.Action
 import transfer._
 import models.StudhelperDb
-import models.{DegreeCourse => DegreeCourseModel, Department => DepartmentModel}
+import models.{DegreeCourse => DegreeCourseModel, Department => DepartmentModel, Modul => ModulModel}
 import play.api.Logger
+import scala.collection.mutable.LinkedList
+import play.api.mvc.AnyContentAsJson
 
 object Department extends Controller {
 
@@ -35,11 +37,11 @@ object Department extends Controller {
   }
   
   def create(id: Long) = Action { implicit request => {
-      val jsonString = request.body.asText
+      val jsonString = request.body
       
       jsonString match {
-        case Some(x) => {
-          val department: DepartmentModel = Json.parse[DepartmentTransfer](x)
+        case AnyContentAsJson(x) => {
+          val department: DepartmentModel = Json.parse[DepartmentTransfer](x.toString())
 
           transaction {
             val university = StudhelperDb.university.where(u => u.id === id).single
@@ -58,11 +60,11 @@ object Department extends Controller {
   }
   
   def update = Action { implicit request => {
-      val jsonString = request.body.asText
-    
+      val jsonString = request.body
+      
       jsonString match {
-        case Some(x) => {
-          val department = Json.parse[DepartmentTransfer](x)
+        case AnyContentAsJson(x) => {
+          val department = Json.parse[DepartmentTransfer](x.toString())
           
           val rows = transaction {
             StudhelperDb.department.update(d =>
@@ -129,11 +131,11 @@ object Department extends Controller {
   }
   
   def createDegreeCourse(id: Long) = Action { implicit request => {
-      val jsonString = request.body.asText
+      val jsonString = request.body
       
       jsonString match {
-        case Some(x) => {
-          val degreeCourse: DegreeCourseModel = Json.parse[DegreeCourseTransfer](x)
+        case AnyContentAsJson(x) => {
+          val degreeCourse: DegreeCourseModel = Json.parse[DegreeCourseTransfer](x.toString())
 
           transaction {
             val department = StudhelperDb.department.where(d => d.id === id).single
@@ -151,6 +153,43 @@ object Department extends Controller {
   	}
   }
   
-  def getModul(id: Long) = TODO
+  def getModul(id: Long) = Action {
+    transaction {  
+      var result = new LinkedList[ModulTransfer]
+      
+      val department = StudhelperDb.department.where(d => d.id === id).single
+      
+      val degreeCourses = department.degreeCourses.elements
+      
+      for(degreeCourse <- degreeCourses) {
+        Logger.debug("DegreeCourse-Id: " + degreeCourse.id)
+        Logger.debug("DegreeCourse-Name: " + degreeCourse.name)
+        val deg = StudhelperDb.degreeCourse.where(d => d.id === degreeCourse.id).single
+        
+        val parts = deg.parts.elements
+        
+        for(part <- parts) {
+          Logger.debug("Part-Id: " + part.id)
+          Logger.debug("Part-Name: " + part.name)
+          val par = StudhelperDb.part.where(p => p.id === part.id).single
+          
+          val modules = par.moduls.elements
+          
+          for(modul <- modules) {
+            val modulTransfer: ModulTransfer = modul
+
+            Logger.debug("Modul-Name: " + modulTransfer.name)
+            
+            result = result.append( LinkedList(modulTransfer))
+          }
+          
+        }
+      }
+      
+      val jsonString = Json.generate(result)
+        
+      Ok(jsonString) as("application/json")
+    }
+  }
   
 }

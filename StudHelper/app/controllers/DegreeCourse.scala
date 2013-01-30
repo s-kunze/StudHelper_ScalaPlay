@@ -8,10 +8,12 @@ import transfer._
 import models.StudhelperDb
 import models.{Part => PartModel, DegreeCourse => DegreeCourseModel}
 import play.api.Logger
+import play.api.mvc.AnyContentAsJson
 
 object DegreeCourse extends Controller {
 
   def getAll = Action {
+    Logger.debug("Get DegreeCourses")
     val json = transaction {
 	  val degreeCourses: Iterable[DegreeCourseTransfer] = from(StudhelperDb.degreeCourse)(d => select(d))
       Json.generate(degreeCourses)
@@ -21,6 +23,7 @@ object DegreeCourse extends Controller {
   }           
   
   def get(id: Long) = Action {
+    Logger.debug("Get DegreeCourse")
     transaction {
       try { 
         val degreeCourse: DegreeCourseTransfer = StudhelperDb.degreeCourse.where(d => d.id === id).single
@@ -35,11 +38,11 @@ object DegreeCourse extends Controller {
   }
   
   def create(id: Long) = Action { implicit request => {
-      val jsonString = request.body.asText
+      val jsonString = request.body
       
       jsonString match {
-        case Some(x) => {
-          val degreeCourse: DegreeCourseModel = Json.parse[DegreeCourseTransfer](x)
+        case AnyContentAsJson(x) => {
+          val degreeCourse: DegreeCourseModel = Json.parse[DegreeCourseTransfer](x.toString())
 
           transaction {
             val department = StudhelperDb.department.where(d => d.id === id).single
@@ -58,11 +61,11 @@ object DegreeCourse extends Controller {
   }
   
   def update = Action { implicit request => {
-      val jsonString = request.body.asText
-    
+      val jsonString = request.body
+      
       jsonString match {
-        case Some(x) => {
-          val degreeCourse = Json.parse[DegreeCourseTransfer](x)
+        case AnyContentAsJson(x) => {
+          val degreeCourse = Json.parse[DegreeCourseTransfer](x.toString())
           
           val rows = transaction {
             StudhelperDb.degreeCourse.update(d =>
@@ -132,11 +135,11 @@ object DegreeCourse extends Controller {
   }
   
   def createPart(id: Long) = Action { implicit request => {
-      val jsonString = request.body.asText
+      val jsonString = request.body
       
       jsonString match {
-        case Some(x) => {
-          val part: PartModel = Json.parse[PartTransfer](x)
+        case AnyContentAsJson(x) => {
+          val part: PartModel = Json.parse[PartTransfer](x.toString())
 
           transaction {
             val degreeCourse = StudhelperDb.degreeCourse.where(d => d.id === id).single

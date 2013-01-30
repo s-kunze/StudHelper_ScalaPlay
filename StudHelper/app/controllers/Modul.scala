@@ -8,6 +8,7 @@ import transfer._
 import models.StudhelperDb
 import models.{Modul => ModulModel, Lecture => LectureModel}
 import play.api.Logger
+import play.api.mvc.AnyContentAsJson
 
 object Modul extends Controller {
 
@@ -35,11 +36,11 @@ object Modul extends Controller {
   }
   
   def create(id: Long) = Action { implicit request => {
-      val jsonString = request.body.asText
+      val jsonString = request.body
       
       jsonString match {
-        case Some(x) => {
-          val modul: ModulModel = Json.parse[ModulTransfer](x)
+        case AnyContentAsJson(x) => {
+          val modul: ModulModel = Json.parse[ModulTransfer](x.toString())
 
           transaction {
             val part = StudhelperDb.part.where(p => p.id === id).single
@@ -58,11 +59,11 @@ object Modul extends Controller {
   }
   
   def update = Action { implicit request => {
-      val jsonString = request.body.asText
-    
+      val jsonString = request.body
+      
       jsonString match {
-        case Some(x) => {
-          val modul = Json.parse[ModulTransfer](x)
+        case AnyContentAsJson(x) => {
+          val modul = Json.parse[ModulTransfer](x.toString())
           
           val rows = transaction {
             StudhelperDb.modul.update(m =>
@@ -132,26 +133,42 @@ object Modul extends Controller {
   }
   
   def createLecture(id: Long) = Action { implicit request => {
-      val jsonString = request.body.asText
+	  Logger.debug("Create lecture")
+      val jsonString = request.body
+      
+      Logger.debug(jsonString.toString)
       
       jsonString match {
-        case Some(x) => {
-          val lecture: LectureModel = Json.parse[LectureTransfer](x)
+        case AnyContentAsJson(x) => {
+          val lecture: LectureModel = Json.parse[LectureTransfer](x.toString())
 
+          Logger.debug("Lecture: " + lecture.name)
+          
           transaction {
             val modul = StudhelperDb.modul.where(m => m.id === id).single
 
+            Logger.debug("Modul: " + modul.name)
+            
             val lectureDb = StudhelperDb.lecture.where(l => l.name === lecture.name)
             
             val newModulToLecture = lectureDb.headOption match {
               case None => { 
+                Logger.debug("noch nicht vorhanden")
                 StudhelperDb.lecture insert lecture
                 modul.lectures.assign(lecture)
               }
-              case Some(x) => modul.lectures.assign(x)
+              case Some(x) => {
+            	  Logger.debug("noch vorhanden")
+            	  modul.lectures.assign(x)
+              }
             }
        		
+            Logger.debug("insert")
+            
             StudhelperDb.modulToLecture insert newModulToLecture
+
+            Logger.debug("ready")
+            Logger.debug("" + newModulToLecture.lectureId)
            
 	        newModulToLecture.lectureId match {
 	          case 0 => InternalServerError
@@ -164,6 +181,26 @@ object Modul extends Controller {
   	}
   }
   
-  def getDepartment(id: Long) = TODO
+  def getDepartment(id: Long) = Action {
+    transaction {
+      val modul = StudhelperDb.modul.where(m => m.id === id).single
+      
+      val part = modul.part.head
+      
+      val par = StudhelperDb.part.where(p => p.id === part.id).single
+      
+      val degreeCourse = par.degreeCourse.head
+      
+      val deg = StudhelperDb.degreeCourse.where(d => d.id === degreeCourse.id).single
+      
+      val department: DepartmentTransfer = deg.department.head
+      
+      val jsonString = Json.generate(department)
+      
+      Logger.debug(jsonString)
+      
+      Ok(jsonString) as("application/json") 
+    }
+  }
   
 }

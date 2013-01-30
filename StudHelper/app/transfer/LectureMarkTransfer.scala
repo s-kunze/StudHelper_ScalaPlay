@@ -1,3 +1,3 @@
 package transfer
 
-case class LectureMarkTransfer(name: String, creditPoints: Int, mark: Float)
+case class LectureMarkTransfer(var name: String, var creditPoints: Int, mark: Float)

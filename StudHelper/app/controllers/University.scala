@@ -8,10 +8,12 @@ import transfer._
 import models.StudhelperDb
 import play.api.Logger
 import models.{Department => DepartmentModel}
+import play.api.mvc.AnyContentAsJson
 
 object University extends Controller {
 
   def getAll = Action {
+    Logger.debug("Get Universities")
     val json = transaction {
 	  val universites: Iterable[UniversityTransfer] = from(StudhelperDb.university)(u => select(u))
       Json.generate(universites)
@@ -21,6 +23,7 @@ object University extends Controller {
   }
   
   def get(id: Long) = Action {
+    Logger.debug("Get University")
     transaction {
       try { 
         val university: UniversityTransfer = StudhelperDb.university.where(u => u.id === id).single
@@ -35,11 +38,12 @@ object University extends Controller {
   }
   
   def create = Action { implicit request => {
-      val jsonString = request.body.asText
+	  Logger.debug("Create University")
+      val jsonString = request.body
       
       jsonString match {
-        case Some(x) => {
-          val university = Json.parse[UniversityTransfer](x)
+        case AnyContentAsJson(x) => {
+          val university = Json.parse[UniversityTransfer](x.toString())
           transaction {
             val newUniversity = StudhelperDb.university insert university
 	        newUniversity.id match {
@@ -54,11 +58,12 @@ object University extends Controller {
   }
   
   def update = Action { implicit request => {
-      val jsonString = request.body.asText
-    
+	  Logger.debug("Update University")
+      val jsonString = request.body
+      
       jsonString match {
-        case Some(x) => {
-          val university = Json.parse[UniversityTransfer](x)
+        case AnyContentAsJson(x) => {
+          val university = Json.parse[UniversityTransfer](x.toString())
           
           val rows = transaction {
             StudhelperDb.university.update(u =>
@@ -79,6 +84,7 @@ object University extends Controller {
   }
   
   def delete(id: Long) = Action { 
+    Logger.debug("Delete University")
     transaction {
       val row = StudhelperDb.university.deleteWhere(u => u.id === id)
       
@@ -90,6 +96,7 @@ object University extends Controller {
   }
   
   def getAllDepartment(id: Long) = Action {
+    Logger.debug("Get Departments for University")
     transaction {
       try { 
         val university = StudhelperDb.university.where(u => u.id === id).single
@@ -107,6 +114,7 @@ object University extends Controller {
   }
   
   def getDepartment(uniId: Long, depId: Long) = Action {
+    Logger.debug("Get Department for University")
     transaction {
 	  try { 
         val department: DepartmentTransfer = StudhelperDb.department.where(d => d.id === depId).single
@@ -125,11 +133,12 @@ object University extends Controller {
   }
   
   def createDepartment(id: Long) = Action { implicit request => {
-      val jsonString = request.body.asText
+	  Logger.debug("Create Department")
+      val jsonString = request.body
       
       jsonString match {
-        case Some(x) => {
-          val department: DepartmentModel = Json.parse[DepartmentTransfer](x)
+        case AnyContentAsJson(x) => {
+          val department: DepartmentModel = Json.parse[DepartmentTransfer](x.toString())
 
           transaction {
             val university = StudhelperDb.university.where(u => u.id === id).single

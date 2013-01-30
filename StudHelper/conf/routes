@@ -10,11 +10,11 @@ PUT     /admin                                   controllers.Admin.auth
 
 # User Ressource
 GET     /user                                    controllers.User.getAll
+PUT     /user/auth                               controllers.User.auth
 GET     /user/:id                                controllers.User.get(id: Long)
 PUT     /user/:id                                controllers.User.create(id: Long)
 POST    /user                                    controllers.User.update
 DELETE  /user/:id                                controllers.User.delete(id: Long)
-PUT     /user/auth                               controllers.User.auth
 GET     /user/:id/degreecourse                   controllers.User.getDegreeCourse(id: Long)
 GET     /user/:id/lecture                        controllers.User.getLectures(id: Long)
 
@@ -76,4 +76,4 @@ GET     /lecture/:id                             controllers.Lecture.get(id: Lon
 PUT     /lecture/:id                             controllers.Lecture.create(id: Long)
 POST    /lecture                                 controllers.Lecture.update
 DELETE  /lecture/:id                             controllers.Lecture.delete(id: Long)
-PUT     /lecture/:lecId/adduser/:userId          controllers.Lecture.addLecture(lecId: Long, userId: Long, mark: String ?= "0.0")
+PUT     /lecture/:lecId/adduser/:userId          controllers.Lecture.addLecture(lecId: Long, userId: Long)

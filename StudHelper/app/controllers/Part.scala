@@ -8,6 +8,7 @@ import transfer._
 import models.StudhelperDb
 import models.{Modul => ModulModel, Part => PartModel}
 import play.api.Logger
+import play.api.mvc.AnyContentAsJson
 
 object Part extends Controller {
 
@@ -35,11 +36,11 @@ object Part extends Controller {
   }
   
   def create(id: Long) = Action { implicit request => {
-      val jsonString = request.body.asText
+      val jsonString = request.body
       
       jsonString match {
-        case Some(x) => {
-          val part: PartModel = Json.parse[PartTransfer](x)
+        case AnyContentAsJson(x) => {
+          val part: PartModel = Json.parse[PartTransfer](x.toString())
 
           transaction {
             val degreeCourse = StudhelperDb.degreeCourse.where(d => d.id === id).single
@@ -58,11 +59,11 @@ object Part extends Controller {
   }
   
   def update = Action { implicit request => {
-      val jsonString = request.body.asText
-    
+      val jsonString = request.body
+      
       jsonString match {
-        case Some(x) => {
-          val part = Json.parse[PartTransfer](x)
+        case AnyContentAsJson(x) => {
+          val part = Json.parse[PartTransfer](x.toString())
           
           val rows = transaction {
             StudhelperDb.part.update(p =>
@@ -132,11 +133,11 @@ object Part extends Controller {
   }
   
   def createModul(id: Long) = Action { implicit request => {
-      val jsonString = request.body.asText
+      val jsonString = request.body
       
       jsonString match {
-        case Some(x) => {
-          val modul: ModulModel = Json.parse[ModulTransfer](x)
+        case AnyContentAsJson(x) => {
+          val modul: ModulModel = Json.parse[ModulTransfer](x.toString())
 
           transaction {
             val part = StudhelperDb.part.where(p => p.id === id).single

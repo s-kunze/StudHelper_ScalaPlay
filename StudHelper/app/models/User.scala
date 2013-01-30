@@ -16,12 +16,17 @@ case class User(val firstname: String, val lastname: String, val username: Strin
 
 object User {
   
-  implicit def lectureTransfer2lecture(userTransfer: UserTransfer) : User = {
+  implicit def newUserTransfer2user(newUserTransfer: NewUserTransfer) : User = {
+    User(newUserTransfer.firstname, newUserTransfer.lastname,
+         newUserTransfer.username, newUserTransfer.password, 0, None)
+  }
+  
+  implicit def userTransfer2user(userTransfer: UserTransfer) : User = {
     User(userTransfer.firstname, userTransfer.lastname, userTransfer.username,
         userTransfer.password, userTransfer.creditpoints, None)
   }
   
-  implicit def lecture2lectureTransfer(user: User) : UserTransfer = {
+  implicit def user2userTransfer(user: User) : UserTransfer = {
     UserTransfer(Some(user.id), user.firstname, user.lastname, user.username, user.creditPoints)
   }
   

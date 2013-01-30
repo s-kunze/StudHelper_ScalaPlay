@@ -3,8 +3,8 @@ package models
 import org.squeryl.KeyedEntity
 import org.squeryl.Query
 import org.squeryl.dsl._
-
 import transfer.ModulTransfer
+import scala.collection.mutable.LinkedList
 
 case class Modul(val name: String, val creditPoints: Int, partId: Option[Long]) extends KeyedEntity[Long] {
 	val id: Long = 0
@@ -24,6 +24,10 @@ object Modul {
   }
   
   implicit def degreeCourseList2degreeCourseTransferList(moduls: Query[Modul]) : Iterable[ModulTransfer] = {
+    moduls map (x => ModulTransfer(Some(x.id), x.name, x.creditPoints))
+  }
+  
+  implicit def degreeCourseList2degreeCourseTransferList(moduls: OneToMany[Modul]) : Iterable[ModulTransfer] = {
     moduls map (x => ModulTransfer(Some(x.id), x.name, x.creditPoints))
   }
   

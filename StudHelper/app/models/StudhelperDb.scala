@@ -24,14 +24,14 @@ object StudhelperDb extends Schema {
   val lectureToUser = manyToManyRelation(lecture, user).via[LectureToUser]((l, u, ltu) => (ltu.lectureId === l.id, u.id === ltu.userId))
   val degreeCourseToUser = oneToManyRelation(degreeCourse, user).via((d, u) => d.id === u.degreeCourseId)
   
-  override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) = 
-    foreignKeyDeclaration.constrainReference
-
-  universityToDepartment.foreignKeyDeclaration.constrainReference(onDelete cascade)
-  departmentToDegreeCourse.foreignKeyDeclaration.constrainReference(onDelete cascade)
-  degreeCourseToPart.foreignKeyDeclaration.constrainReference(onDelete cascade)
-  partToModul.foreignKeyDeclaration.constrainReference(onDelete cascade)
-  modulToLecture.rightForeignKeyDeclaration.constrainReference(onDelete noAction)
-  lectureToUser.rightForeignKeyDeclaration.constrainReference(onDelete noAction)
-  degreeCourseToUser.foreignKeyDeclaration.constrainReference(onDelete noAction)
+//  override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) = 
+//    foreignKeyDeclaration.constrainReference
+//
+//  universityToDepartment.foreignKeyDeclaration.constrainReference(onDelete cascade)
+//  departmentToDegreeCourse.foreignKeyDeclaration.constrainReference(onDelete cascade)
+//  degreeCourseToPart.foreignKeyDeclaration.constrainReference(onDelete cascade)
+//  partToModul.foreignKeyDeclaration.constrainReference(onDelete cascade)
+//  modulToLecture.rightForeignKeyDeclaration.constrainReference(onDelete noAction)
+//  lectureToUser.rightForeignKeyDeclaration.constrainReference(onDelete noAction)
+//  degreeCourseToUser.foreignKeyDeclaration.constrainReference(onDelete noAction)
 }
